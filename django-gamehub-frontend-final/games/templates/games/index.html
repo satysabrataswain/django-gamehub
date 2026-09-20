@@ -1,0 +1,401 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+    <meta
+        name="description"
+        content="GameHub - Play Tic-Tac-Toe and Bingo."
+    >
+    <title>GameHub</title>
+    <link
+        rel="stylesheet"
+        href="{% static 'games/gamehub.css' %}"
+    >
+</head>
+<body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="shell">
+        <header class="topbar">
+            <a class="brand" href="/" aria-label="GameHub home">
+                <span class="brand-mark">G</span>
+                <span>
+                    <strong>GameHub</strong>
+                    <small>Play. Think. Win.</small>
+                </span>
+            </a>
+
+            <div id="userBar" class="user-bar hidden">
+                <span class="online-dot" aria-hidden="true"></span>
+                <span id="usernameLabel"></span>
+                <button
+                    id="logoutButton"
+                    class="button button-ghost button-small"
+                    type="button"
+                >
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <section id="authView" class="auth-layout">
+            <div class="hero">
+                <span class="eyebrow">DJANGO GAMEHUB</span>
+                <h1>
+                    Two games.
+                    <span>One arena.</span>
+                </h1>
+                <p>
+                    Challenge the computer or create a room and play
+                    with a friend. No frontend build tools required.
+                </p>
+
+                <div class="hero-games">
+                    <div class="mini-game-card">
+                        <span class="mini-icon">XO</span>
+                        <div>
+                            <strong>Tic-Tac-Toe</strong>
+                            <small>Fast strategy</small>
+                        </div>
+                    </div>
+                    <div class="mini-game-card">
+                        <span class="mini-icon">25</span>
+                        <div>
+                            <strong>Bingo</strong>
+                            <small>Race to 5 lines</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <div class="tab-row" role="tablist">
+                    <button
+                        id="loginTab"
+                        class="tab active"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                    >
+                        Login
+                    </button>
+                    <button
+                        id="registerTab"
+                        class="tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="false"
+                    >
+                        Register
+                    </button>
+                </div>
+
+                <form id="loginForm" class="auth-form">
+                    <label>
+                        Username
+                        <input
+                            id="loginUsername"
+                            name="username"
+                            autocomplete="username"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            id="loginPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </label>
+
+                    <button
+                        class="button button-primary button-full"
+                        type="submit"
+                    >
+                        Enter GameHub
+                    </button>
+                </form>
+
+                <form id="registerForm" class="auth-form hidden">
+                    <label>
+                        Username
+                        <input
+                            id="registerUsername"
+                            name="username"
+                            autocomplete="username"
+                            minlength="3"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Email <span class="muted">(optional)</span>
+                        <input
+                            id="registerEmail"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                        >
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            id="registerPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                        >
+                    </label>
+
+                    <button
+                        class="button button-primary button-full"
+                        type="submit"
+                    >
+                        Create Account
+                    </button>
+                </form>
+
+                <p id="authMessage" class="form-message" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <section id="dashboardView" class="hidden">
+            <div class="dashboard-heading">
+                <div>
+                    <span class="eyebrow">GAME LOBBY</span>
+                    <h1>Choose your battle.</h1>
+                </div>
+                <button
+                    id="refreshLobbyButton"
+                    class="button button-ghost"
+                    type="button"
+                >
+                    Refresh lobby
+                </button>
+            </div>
+
+            <div class="game-grid">
+                <article class="game-card ttt-card">
+                    <div class="game-card-top">
+                        <div class="game-symbol">X/O</div>
+                        <span class="pill">3 × 3</span>
+                    </div>
+                    <h2>Tic-Tac-Toe</h2>
+                    <p>
+                        Classic grid strategy with a minimax-powered
+                        computer opponent.
+                    </p>
+                    <div class="game-actions">
+                        <button
+                            class="button button-primary create-game"
+                            data-game="TIC_TAC_TOE"
+                            data-mode="PVC"
+                            type="button"
+                        >
+                            vs Computer
+                        </button>
+                        <button
+                            class="button button-secondary create-game"
+                            data-game="TIC_TAC_TOE"
+                            data-mode="PVP"
+                            type="button"
+                        >
+                            Create PVP
+                        </button>
+                    </div>
+                </article>
+
+                <article class="game-card bingo-card">
+                    <div class="game-card-top">
+                        <div class="game-symbol">BINGO</div>
+                        <span class="pill">5 × 5</span>
+                    </div>
+                    <h2>Bingo</h2>
+                    <p>
+                        Call numbers, complete five lines, and beat
+                        your opponent to BINGO.
+                    </p>
+                    <div class="game-actions">
+                        <button
+                            class="button button-primary create-game"
+                            data-game="BINGO"
+                            data-mode="PVC"
+                            type="button"
+                        >
+                            vs Computer
+                        </button>
+                        <button
+                            class="button button-secondary create-game"
+                            data-game="BINGO"
+                            data-mode="PVP"
+                            type="button"
+                        >
+                            Create PVP
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <div class="lobby-grid">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker">MULTIPLAYER</span>
+                            <h2>Waiting rooms</h2>
+                        </div>
+                        <span id="waitingCount" class="count-badge">0</span>
+                    </div>
+                    <div
+                        id="waitingGames"
+                        class="room-list"
+                        aria-live="polite"
+                    ></div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="panel-kicker">YOUR ACTIVITY</span>
+                            <h2>Recent games</h2>
+                        </div>
+                    </div>
+                    <div
+                        id="myGames"
+                        class="room-list"
+                        aria-live="polite"
+                    ></div>
+                </section>
+            </div>
+        </section>
+
+        <section id="gameView" class="hidden">
+            <div class="game-toolbar">
+                <button
+                    id="backButton"
+                    class="button button-ghost"
+                    type="button"
+                >
+                    ← Lobby
+                </button>
+
+                <div class="game-meta">
+                    <span id="gameTypeBadge" class="pill"></span>
+                    <span id="gameIdLabel" class="muted"></span>
+                </div>
+            </div>
+
+            <div class="play-layout">
+                <section class="play-card">
+                    <div class="play-heading">
+                        <div>
+                            <span id="gameModeLabel" class="eyebrow"></span>
+                            <h1 id="gameTitle"></h1>
+                        </div>
+                        <span
+                            id="statusBadge"
+                            class="status-badge"
+                        ></span>
+                    </div>
+
+                    <div
+                        id="gameStatus"
+                        class="game-status"
+                        aria-live="polite"
+                    ></div>
+
+                    <div id="ticTacToeArea" class="hidden">
+                        <div
+                            id="ticTacToeBoard"
+                            class="ttt-board"
+                            aria-label="Tic-Tac-Toe board"
+                        ></div>
+                    </div>
+
+                    <div id="bingoArea" class="hidden">
+                        <div class="bingo-progress">
+                            <div>
+                                <span class="muted">Your progress</span>
+                                <strong id="bingoLineCount">0 / 5 lines</strong>
+                            </div>
+                            <div
+                                id="bingoLetters"
+                                class="bingo-letters"
+                                aria-label="Bingo progress"
+                            ></div>
+                        </div>
+
+                        <p class="board-help">
+                            Click an uncalled number on your board
+                            when it is your turn.
+                        </p>
+
+                        <div
+                            id="bingoBoard"
+                            class="bingo-board"
+                            aria-label="Bingo board"
+                        ></div>
+
+                        <div class="called-wrap">
+                            <span class="muted">Called numbers</span>
+                            <div
+                                id="calledNumbers"
+                                class="called-numbers"
+                            ></div>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="match-card">
+                    <span class="panel-kicker">MATCH</span>
+                    <div id="playerOne" class="player-row"></div>
+                    <div class="versus">VS</div>
+                    <div id="playerTwo" class="player-row"></div>
+
+                    <div class="match-divider"></div>
+
+                    <dl class="match-details">
+                        <div>
+                            <dt>Your role</dt>
+                            <dd id="yourRoleLabel">—</dd>
+                        </div>
+                        <div>
+                            <dt>Current turn</dt>
+                            <dd id="turnLabel">—</dd>
+                        </div>
+                    </dl>
+
+                    <button
+                        id="manualRefreshButton"
+                        class="button button-secondary button-full"
+                        type="button"
+                    >
+                        Refresh match
+                    </button>
+                </aside>
+            </div>
+        </section>
+
+        <div
+            id="toast"
+            class="toast hidden"
+            role="status"
+            aria-live="polite"
+        ></div>
+    </main>
+
+    <script src="{% static 'games/gamehub.js' %}"></script>
+</body>
+</html>
